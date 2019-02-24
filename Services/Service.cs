@@ -7,13 +7,16 @@ using NFive.SDK.Client.Rpc;
 using NFive.SDK.Core.Diagnostics;
 using NFive.SDK.Core.Models.Player;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using NFive.SDK.Core.Plugins;
 
 namespace NFive.SDK.Client.Services
 {
 	[PublicAPI]
 	public abstract class Service
 	{
+		protected readonly List<Plugin> Plugins;  
 		protected readonly ILogger Logger;
 		protected readonly ITickManager Ticks;
 		protected readonly IEventManager Events;
@@ -22,15 +25,16 @@ namespace NFive.SDK.Client.Services
 		protected readonly OverlayManager OverlayManager;
 		protected readonly User User;
 
-		protected Service(ILogger logger, ITickManager ticks, IEventManager events, IRpcHandler rpc, ICommandManager commands, OverlayManager overlayManager, User user)
+		protected Service(List<Plugin> plugins, ILogger logger, ITickManager ticks, IEventManager events, IRpcHandler rpc, ICommandManager commands, OverlayManager overlayManager, User user)
 		{
+			this.Plugins = plugins;
 			this.Logger = logger;
 			this.Ticks = ticks;
 			this.Events = events;
 			this.Rpc = rpc;
 			this.Commands = commands;
 			this.OverlayManager = overlayManager;
-			this.User = user;
+			this.User = user;			
 		}
 
 		public virtual Task Loaded() => Task.FromResult(0);
